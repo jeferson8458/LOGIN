@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard</title>
+</head>
+<body>
+<h1>Bem-vindo ao seu Dashboard</h1>
+<div id="user-info"></div>
+<button id="logout-btn">Sair</button>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+// Função para verificar se o usuário está autenticado
+function checkAuthentication() {
+    var token = localStorage.getItem('jwtToken');
+
+    // Se o token JWT não estiver presente, redireciona para a página de login
+    if (!token) {
+        window.location.href = 'index.html';
+    }
+}
+
+// Chama a função de verificação de autenticação ao carregar a página
+checkAuthentication();
+
+// Função para fazer logout
+function logout() {
+    // Limpa o token JWT do localStorage
+    localStorage.removeItem('jwtToken');
+    // Redireciona para a página de login
+    window.location.href = 'index.html';
+}
+
+// Adiciona um evento de clique ao botão "Sair" para fazer logout
+document.getElementById('logout-btn').addEventListener('click', logout);
+
+// Função para obter os dados do usuário
+function getUserData() {
+    var token = localStorage.getItem('jwtToken');
+    var apiUrl = 'http://localhost:3333/me'; // Seu endpoint para obter os dados do usuário
+
+    axios.get(apiUrl, {
+        headers: {
+            'Authorization': 'Bearer ' + token
+        }
+    })
+    .then(response => {
+        var userData = response.data;
+        // Exibe os dados do usuário na página
+        document.getElementById('user-info').innerHTML = `
+            <p>Id: ${userData.user.id}</p>
+            <p>Nome: ${userData.user.name}</p>
+            <p>Email: ${userData.user.email}</p>
+        `;
+    })
+    .catch(error => {
+        console.error('Erro ao obter os dados do usuário:', error);
+    });
+}
+
+// Chamada para obter os dados do usuário ao carregar a página
+getUserData();
+</script>
+</body>
+</html>
