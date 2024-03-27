@@ -4,7 +4,7 @@ document.getElementById('login-form').addEventListener('submit', function(event)
     var email = document.getElementById('email').value;
     var password = document.getElementById('password').value;
 
-    var apiUrl = 'http://localhost:3333/authenticate'; // Seu endpoint de autenticação
+    var apiUrl = ''; // Seu endpoint de autenticação http://localhost:3333/authenticate
 
     axios.post(apiUrl, {
         email: email,
